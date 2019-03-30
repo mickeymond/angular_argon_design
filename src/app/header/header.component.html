@@ -1,0 +1,93 @@
+<header class="header-global">
+    <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
+      <div class="container">
+        <a class="navbar-brand mr-lg-5" routerLink="/">
+          TrustMyVote
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar_global">
+          <div class="navbar-collapse-header">
+            <div class="row">
+              <div class="col-6 collapse-brand">
+                <a routerLink="/login">
+                  Sign In
+                </a>
+              </div>
+              <div class="col-6 collapse-close">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                  <span></span>
+                  <span></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link" data-toggle="dropdown" href="#" role="button">
+                <i class="ni ni-ui-04 d-lg-none"></i>
+                <span class="nav-link-inner--text">Go To</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-xl">
+                <div class="dropdown-menu-inner">
+                  <a routerLink="/" class="media d-flex align-items-center">
+                    <div class="icon icon-shape bg-gradient-primary rounded-circle text-white">
+                      <i class="ni ni-spaceship"></i>
+                    </div>
+                    <div class="media-body ml-3">
+                      <h6 class="heading text-primary mb-md-1">All Events</h6>
+                      <p class="description d-none d-md-inline-block mb-0">
+                        View all the events currently hosted by TrustMyVote
+                      </p>
+                    </div>
+                  </a>
+                  <a routerLink="/" class="media d-flex align-items-center">
+                    <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
+                      <i class="ni ni-palette"></i>
+                    </div>
+                    <div class="media-body ml-3">
+                      <h6 class="heading text-primary mb-md-1">My Events</h6>
+                      <p class="description d-none d-md-inline-block mb-0">
+                        View events managed by you.
+                      </p>
+                    </div>
+                  </a>
+                  <a routerLink="/" class="media d-flex align-items-center">
+                    <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
+                      <i class="ni ni-palette"></i>
+                    </div>
+                    <div class="media-body ml-3">
+                      <h6 class="heading text-primary mb-md-1">Create Event</h6>
+                      <p class="description d-none d-md-inline-block mb-0">
+                        Create your event.
+                      </p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+            <li class="nav-item">
+              <form action="">
+                  <div class="form-group mb-0">
+                    <div class="input-group input-group-alternative">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                      </div>
+                      <input class="form-control" placeholder="Search" type="text">
+                    </div>
+                  </div>
+              </form>
+            </li>
+            <li class="nav-item d-none d-lg-block ml-lg-4">
+              <a routerLink="/login" class="btn btn-neutral btn-icon">
+                <span class="nav-link-inner--text">Sign In</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+</header>
