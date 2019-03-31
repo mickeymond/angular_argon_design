@@ -6,8 +6,9 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './auth/login/login.component';
 import { FooterComponent } from './footer/footer.component';
-import { HomeComponent } from './home/home.component';
 import { CreateEventComponent } from './events/create-event/create-event.component';
+import { EventsComponent } from './events/events.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CreateEventComponent } from './events/create-event/create-event.compone
     HeaderComponent,
     FooterComponent,
     LoginComponent,
-    HomeComponent,
+    RegisterComponent,
+    EventsComponent,
     CreateEventComponent
   ],
   imports: [
