@@ -9,6 +9,7 @@ import { FooterComponent } from './footer/footer.component';
 import { CreateEventComponent } from './events/create-event/create-event.component';
 import { EventsComponent } from './events/events.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { EventDetailComponent } from './events/event-detail/event-detail.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { RegisterComponent } from './auth/register/register.component';
     LoginComponent,
     RegisterComponent,
     EventsComponent,
-    CreateEventComponent
+    CreateEventComponent,
+    EventDetailComponent
   ],
   imports: [
     BrowserModule,
