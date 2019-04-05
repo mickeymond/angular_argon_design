@@ -1,7 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -10,6 +13,7 @@ import { CreateEventComponent } from './events/create-event/create-event.compone
 import { EventsComponent } from './events/events.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { EventDetailComponent } from './events/event-detail/event-detail.component';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,9 @@ import { EventDetailComponent } from './events/event-detail/event-detail.compone
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
