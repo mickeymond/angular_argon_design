@@ -11,9 +11,6 @@
           <div class="navbar-collapse-header">
             <div class="row">
               <div class="col-6 collapse-brand">
-                <a routerLink="/login">
-                  Sign In
-                </a>
               </div>
               <div class="col-6 collapse-close">
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +20,7 @@
               </div>
             </div>
           </div>
-          <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+          <ul *ngIf="isDappBrowser" class="navbar-nav navbar-nav-hover align-items-lg-center">
             <li class="nav-item dropdown">
               <a href="#" class="nav-link" data-toggle="dropdown" href="#" role="button">
                 <i class="ni ni-ui-04 d-lg-none"></i>
@@ -31,7 +28,7 @@
               </a>
               <div class="dropdown-menu dropdown-menu-xl">
                 <div class="dropdown-menu-inner">
-                  <a routerLink="/" class="media d-flex align-items-center">
+                  <a routerLink="/events" class="media d-flex align-items-center">
                     <div class="icon icon-shape bg-gradient-primary rounded-circle text-white">
                       <i class="ni ni-spaceship"></i>
                     </div>
@@ -42,7 +39,7 @@
                       </p>
                     </div>
                   </a>
-                  <a [routerLink]="'/'" [queryParams]="{creator: 'address'}" class="media d-flex align-items-center">
+                  <a [routerLink]="'/events'" [queryParams]="{creator: 'address'}" class="media d-flex align-items-center">
                     <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
                       <i class="ni ni-palette"></i>
                     </div>
@@ -68,7 +65,7 @@
               </div>
             </li>
           </ul>
-          <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+          <ul *ngIf="isDappBrowser" class="navbar-nav align-items-lg-center ml-lg-auto">
             <li class="nav-item">
               <form action="">
                   <div class="form-group mb-0">
@@ -80,11 +77,6 @@
                     </div>
                   </div>
               </form>
-            </li>
-            <li class="nav-item d-none d-lg-block ml-lg-4">
-              <a routerLink="/login" class="btn btn-neutral btn-icon">
-                <span class="nav-link-inner--text">Sign In</span>
-              </a>
             </li>
           </ul>
         </div>

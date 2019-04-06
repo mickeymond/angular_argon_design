@@ -1,3 +1,8 @@
+<div *ngIf="!isDappBrowser" id="alert" role="alert" class="alert alert-warning">
+    <span class="alert-inner--text">
+        <strong style="font-size: 1.2rem">{{ethMessage}}</strong>
+    </span>
+</div>
 <app-header></app-header>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
