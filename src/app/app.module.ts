@@ -14,10 +14,12 @@ import { EventsComponent } from './events/events.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { EventDetailComponent } from './events/event-detail/event-detail.component';
 import { environment } from 'src/environments/environment';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     HeaderComponent,
     FooterComponent,
     LoginComponent,
