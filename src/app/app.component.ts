@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 export class AppComponent implements OnInit, OnDestroy {
   private ethListenerSubscription: Subscription;
   private ethMessageSubscription: Subscription;
+  private ethEventsSubscription: Subscription;
 
   isDappBrowser = false;
   ethMessage: string;
@@ -24,10 +25,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.ethMessageSubscription = this.ethService.getEthMessageListener().subscribe((message) => {
       this.ethMessage = message;
     });
+
+    this.ethEventsSubscription = this.ethService.getEthEventsListener().subscribe((events) => {
+      console.log(events);
+    });
   }
 
   ngOnDestroy() {
     this.ethListenerSubscription.unsubscribe();
     this.ethMessageSubscription.unsubscribe();
+    this.ethEventsSubscription.unsubscribe();
   }
 }

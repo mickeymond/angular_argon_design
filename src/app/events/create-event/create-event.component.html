@@ -18,29 +18,31 @@
         <div class="col-lg-8">
           <div class="card bg-gradient-secondary shadow">
             <div class="card-body p-lg-5">
-              <form action="">
-                <div class="form-group mt-5">
+              <form (submit)="createEvent(f)" #f="ngForm">
+                <div class="form-group">
+                  <label for="title">Event Title</label>
                   <div class="input-group input-group-alternative">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-user-run"></i></span>
-                    </div>
-                    <input class="form-control" placeholder="Your name" type="text">
+                    <input name="title" id="title" ngModel class="form-control" required type="text">
                   </div>
                 </div>
                 <div class="form-group">
+                  <label for="description">Event Description</label>
+                  <input name="description" id="description" ngModel class="form-control" required type="text">
+                </div>
+                <div class="form-group">
+                  <label for="startDate">Event Start Date</label>
                   <div class="input-group input-group-alternative">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-email-83"></i></span>
-                    </div>
-                    <input class="form-control" placeholder="Email address" type="email">
+                    <input name="startDate" id="startDate" ngModel class="form-control" required type="date">
                   </div>
                 </div>
-                <div class="form-group mb-4">
-                  <textarea class="form-control form-control-alternative" name="name" rows="4" cols="80"
-                    placeholder="Type a message..."></textarea>
+                <div class="form-group">
+                  <label for="endDate">Event End Date</label>
+                  <div class="input-group input-group-alternative">
+                    <input name="endDate" id="endDate" ngModel class="form-control" required type="date">
+                  </div>
                 </div>
-                <div>
-                  <button type="button" class="btn btn-default btn-round btn-block btn-lg">Create Event</button>
+                <div class="mt-4">
+                  <button type="submit" class="btn btn-default btn-round btn-block btn-lg">Create Event</button>
                 </div>
               </form>
             </div>
