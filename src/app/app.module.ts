@@ -5,21 +5,19 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-// import { LoginComponent } from './auth/login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { CreateEventComponent } from './events/create-event/create-event.component';
 import { EventsComponent } from './events/events.component';
-// import { RegisterComponent } from './auth/register/register.component';
 import { EventDetailComponent } from './events/event-detail/event-detail.component';
 import { HomeComponent } from './home/home.component';
+import { InfoComponent } from './info/info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    // LoginComponent,
-    // RegisterComponent,
+    InfoComponent,
     HomeComponent,
     EventsComponent,
     CreateEventComponent,

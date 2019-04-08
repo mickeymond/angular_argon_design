@@ -39,7 +39,7 @@
                       </p>
                     </div>
                   </a>
-                  <a [routerLink]="'/events'" [queryParams]="{creator: 'address'}" class="media d-flex align-items-center">
+                  <a [routerLink]="'/events'" [queryParams]="{creator: creator}" class="media d-flex align-items-center">
                     <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
                       <i class="ni ni-palette"></i>
                     </div>
@@ -65,7 +65,7 @@
               </div>
             </li>
           </ul>
-          <ul *ngIf="isDappBrowser" class="navbar-nav align-items-lg-center ml-lg-auto">
+          <ul *ngIf="isDappBrowser && hasSearch" class="navbar-nav align-items-lg-center ml-lg-auto">
             <li class="nav-item">
               <form action="">
                   <div class="form-group mb-0">
