@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
-import { EthService } from '../eth.service';
 import { Subject } from 'rxjs';
 
-const eventJson = require('../../contracts/Event.json');
+import { EthService } from '../eth.service';
+import { IEvent } from './event.model';
+
+declare let web3: any;
+declare let require: any;
+
 const _ = require('lodash');
+const TruffleContract = require('truffle-contract');
+
+const EventContract = TruffleContract(require('../../contracts/Event.json'));
+EventContract.setProvider(web3.currentProvider);
+
+const colors = ['primary', 'warning', 'success', 'info'];
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +22,6 @@ export class EventsService {
     private eventsListener = new Subject<any[]>();
 
     private events: any[];
-    private colors = ['primary', 'warning', 'success', 'info'];
 
     constructor(private ethService: EthService) {}
 
@@ -20,30 +29,42 @@ export class EventsService {
         return this.eventsListener.asObservable();
     }
 
-    async fetchEventsData(events: string[], creator: any) {
-        const allEvents = [];
-        for(let address of events.reverse()) {
-            const eventContract = await this.ethService.web3.eth.Contract(eventJson.abi, address);
-            const creator = await eventContract.methods.creator().call();
-            const title = await eventContract.methods.title().call();
-            const description = await eventContract.methods.description().call();
-            const startDate = await eventContract.methods.startDate().call();
-            const endDate = await eventContract.methods.endDate().call();
+    async fetchEventsData(events: string[], eventCreator: any, search: any) {
+        const allEvents: IEvent[] = [];
+        for (const address of events.reverse()) {
+
+            const eventContract = await EventContract.at(address);
+
+            const creator = await eventContract.creator();
+            const title = await eventContract.title();
+            const description = await eventContract.description();
+            const startDate = await eventContract.startDate();
+            const endDate = await eventContract.endDate();
+
             allEvents.push({
                 address,
                 creator,
                 title,
                 description,
-                start: startDate.toNumber(),
-                end: endDate.toNumber(),
-                color: _.sample(this.colors)
+                start: startDate.toNumber() * 1000,
+                end: endDate.toNumber() * 1000,
+                color: _.sample(colors)
             });
         }
-        if(creator) {
-            this.events = _.filter(allEvents, event => event.creator === creator);
+        // console.log(allEvents);
+
+        if (eventCreator) {
+            this.events = _.filter(allEvents, (event: IEvent) => event.creator === eventCreator);
+            this.eventsListener.next(this.events);
+        } else if (search) {
+            this.events = _.filter(allEvents, (event: IEvent) => {
+                return (event.title.includes(search) || event.description.includes(search));
+            });
             this.eventsListener.next(this.events);
         } else {
-            this.events = allEvents;
+            const now = Date.now();
+
+            this.events = _.filter(allEvents, (event: IEvent) => (now >= event.start && now <= event.end));
             this.eventsListener.next(this.events);
         }
     }

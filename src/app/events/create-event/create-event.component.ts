@@ -15,6 +15,7 @@ export class CreateEventComponent {
         }
         // console.log(form.value);
         const { title, description, startDate, endDate } = form.value;
+
         this.ethService.createEvent(title, description, this.getTime(startDate), this.getTime(endDate));
     }
 

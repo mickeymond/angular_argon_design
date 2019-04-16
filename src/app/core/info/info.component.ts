@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { EthService } from '../eth.service';
+
+import { EthService } from '../../eth.service';
 
 @Component({
     selector: 'app-info',
@@ -10,7 +11,7 @@ export class InfoComponent {
     constructor(private ethService: EthService) {}
 
     submitInfo(form: NgForm) {
-        if(form.invalid) {
+        if (form.invalid) {
             return;
         }
         const { fullName, email, phoneNumber } = form.value;

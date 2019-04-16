@@ -33,9 +33,9 @@
                       <i class="ni ni-spaceship"></i>
                     </div>
                     <div class="media-body ml-3">
-                      <h6 class="heading text-primary mb-md-1">All Events</h6>
+                      <h6 class="heading text-primary mb-md-1">All Live Events</h6>
                       <p class="description d-none d-md-inline-block mb-0">
-                        View all the events currently hosted by TrustMyVote
+                        View all the live events currently hosted by TrustMyVote
                       </p>
                     </div>
                   </a>
@@ -65,15 +65,15 @@
               </div>
             </li>
           </ul>
-          <ul *ngIf="isDappBrowser && hasSearch" class="navbar-nav align-items-lg-center ml-lg-auto">
-            <li class="nav-item">
-              <form action="">
+          <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+            <li *ngIf="isDappBrowser && hasSearch" class="nav-item">
+              <form #f="ngForm" (submit)="searchEvents(f)" autocomplete="off">
                   <div class="form-group mb-0">
                     <div class="input-group input-group-alternative">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fa fa-search"></i></span>
                       </div>
-                      <input class="form-control" placeholder="Search" type="text">
+                      <input ngModel name="search" class="form-control" required placeholder="Search" type="text">
                     </div>
                   </div>
               </form>

@@ -19,14 +19,15 @@ export class EventsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.eventsSubscription = this.eventsService.getEventsListener().subscribe(events => {
             this.events = events;
+            // console.log(events);
         });
 
         this.ethEventsSubscription = this.ethService.getEthEventsListener().subscribe((events) => {
             this.route.queryParamMap.subscribe((queryMap: ParamMap) => {
-                if(queryMap.has('creator')) {
-                    this.eventsService.fetchEventsData(events, queryMap.get('creator'));
+                if (queryMap.has('creator')) {
+                    this.eventsService.fetchEventsData(events, queryMap.get('creator'), false);
                 } else {
-                    this.eventsService.fetchEventsData(events, null);
+                    this.eventsService.fetchEventsData(events, false, false);
                 }
             });
         });

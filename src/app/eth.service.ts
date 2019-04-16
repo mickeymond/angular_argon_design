@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
-import Web3 from 'web3';
 import { Subject } from 'rxjs';
 
 declare let window: any;
+declare let web3: any;
+declare let require: any;
+
+const Web3 = require('web3');
+const TruffleContract = require('truffle-contract');
 
 @Injectable({
     providedIn: 'root'
@@ -15,8 +18,6 @@ export class EthService {
     private ethEventsListener = new Subject<string[]>();
     private ethAccountListener = new Subject<string>();
 
-    web3: any;
-    private web3Provider: any;
     private eventCreatorContract: any;
     private isDappBrowser = false;
     private ethMessage: string;
@@ -24,6 +25,10 @@ export class EthService {
 
     getIsDappBrowser() {
         return this.isDappBrowser;
+    }
+
+    getCurrentAccount() {
+        return this.currentAccount;
     }
 
     getEthAccountListener() {
@@ -43,57 +48,54 @@ export class EthService {
     }
 
     async createEvent(title: string, description: string, startDate: number, endDate: number) {
-        try {
-            await this.eventCreatorContract.methods.createEvent(title, description, startDate, endDate).send({
-                from: this.currentAccount,
-                value: 1000000
-            });
-            const events = await this.eventCreatorContract.methods.getEvents().call();
-            this.ethEventsListener.next(events);
-        } catch (error) {
-            console.log(error);
-        }
+        const receipt = await this.eventCreatorContract.createEvent(title, description, startDate, endDate, {
+            from: this.currentAccount,
+            value: 1000000
+        });
+        const eventAddress = receipt.logs[0].args.newEvent;
+        // console.log(receipt);
+        this.router.navigate(['/event', eventAddress]);
     }
 
     async addInfo(firstName: string, email: string, phoneNumber: string) {
         try {
-            await this.eventCreatorContract.methods.addInfo(firstName, email, phoneNumber).send({
+            const receipt = await this.eventCreatorContract.addInfo(firstName, email, phoneNumber, {
                 from: this.currentAccount
             });
+            console.log(receipt);
+            this.router.navigate(['/events']);
         } catch (error) {
             console.log(error);
         }
     }
 
     async getEvents() {
-        const events = await this.eventCreatorContract.methods.getEvents().call();
+        const events = await this.eventCreatorContract.getEvents();
         // console.log(events);
         this.ethEventsListener.next(events);
     }
 
     async initializeContract() {
+        // console.log(web3);
         try {
-            const eventCreatorJson = require('../contracts/EventCreator.json');
-            this.eventCreatorContract = this.web3.eth.Contract(
-                eventCreatorJson.abi, eventCreatorJson.networks['5777'].address
-            );
-            const accounts = await this.web3.eth.personal.getAccounts();
-            this.currentAccount = accounts[0];
-            this.ethAccountListener.next(this.currentAccount);
-            
-            const user = await this.eventCreatorContract.methods.users(this.currentAccount).call();
-            // console.log(user);
-            if(!user) {
-                throw new Error('Failed to get user on current network');
-            }
+            const EventCreatorContract = TruffleContract(require('../contracts/EventCreator.json'));
+            EventCreatorContract.setProvider(web3.currentProvider);
 
-            if(user.fullName === '') {
+            this.eventCreatorContract = await EventCreatorContract.deployed();
+            // console.log(this.eventCreatorContract);
+
+            this.currentAccount = web3.eth.accounts[0];
+            this.ethAccountListener.next(this.currentAccount);
+            // console.log(this.currentAccount);
+
+            const user = await this.eventCreatorContract.users(this.currentAccount);
+            // console.log(user);
+
+            if (user[0] === '') {
                 this.router.navigate(['/info']);
-            } else {
-                this.router.navigate(['/']);
             }
         } catch (error) {
-            this.ethMessage = 'Application has not been deployed to detected network. Please change your network to Localhost 8545';
+            this.ethMessage = error.message;
             this.isDappBrowser = false;
             this.ethStatusListener.next(this.isDappBrowser);
             this.ethMessageListener.next(this.ethMessage);
@@ -107,8 +109,7 @@ export class EthService {
                 // Modern dapp browsers...
                 this.isDappBrowser = true;
                 this.ethStatusListener.next(this.isDappBrowser);
-                this.web3Provider = window.ethereum;
-                this.web3 = new Web3(this.web3Provider);
+                window.web3 = new Web3(window.ethereum);
                 try {
                     // Request account access if needed
                     await window.ethereum.enable();
@@ -125,8 +126,7 @@ export class EthService {
                 // Legacy dapp browsers...
                 this.isDappBrowser = true;
                 this.ethStatusListener.next(this.isDappBrowser);
-                this.web3Provider = window.web3.currentProvider;
-                this.web3 = new Web3(this.web3Provider);
+                window.web3 = new Web3(window.web3.currentProvider);
                 // Acccounts always exposed
                 this.initializeContract();
             } else {
