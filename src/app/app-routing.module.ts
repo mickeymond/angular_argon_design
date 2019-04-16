@@ -4,7 +4,7 @@ import { CreateEventComponent } from './events/create-event/create-event.compone
 import { EventsComponent } from './events/events.component';
 import { EventDetailComponent } from './events/event-detail/event-detail.component';
 import { HomeComponent } from './core/home/home.component';
-import { EthGuard } from './eth.guard';
+import { EthGuard } from './shared/eth.guard';
 import { InfoComponent } from './core/info/info.component';
 import { CategoryDetailComponent } from './events/event-detail/category-detail/category-detail.component';
 
@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'event/:address', component: EventDetailComponent, canActivate: [EthGuard], children: [
     { path: 'category/:cAddress', component: CategoryDetailComponent }
   ] },
+  { path: 'event/:address/edit', component: CreateEventComponent, canActivate: [EthGuard] },
   { path: 'info', component: InfoComponent, canActivate: [EthGuard] },
   { path: 'create', component: CreateEventComponent, canActivate: [EthGuard] },
   { path: '**', redirectTo: '/', pathMatch: 'full' }

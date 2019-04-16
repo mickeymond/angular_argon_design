@@ -3,8 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 
-import { EventService } from './event.service';
-import { IEvent } from '../event.model';
+import { EventService } from '../../shared/event.service';
+import { IEvent } from '../../shared/event.model';
 
 @Component({
     selector: 'app-event-detail',
@@ -26,6 +26,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         }
         // console.log(form.value);
         this.eventService.addCategory(form.value.title, form.value.description);
+        form.resetForm();
     }
 
     ngOnInit() {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { EthService } from 'src/app/eth.service';
+import { EthService } from '../../shared/eth.service';
 
 @Component({
     selector: 'app-create-event',

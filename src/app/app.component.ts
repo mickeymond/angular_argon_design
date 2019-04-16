@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EthService } from './eth.service';
+import { EthService } from './shared/eth.service';
 import { Subscription } from 'rxjs';
 
 @Component({

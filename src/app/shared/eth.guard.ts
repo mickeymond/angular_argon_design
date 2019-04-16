@@ -1,4 +1,4 @@
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { EthService } from './eth.service';
@@ -7,7 +7,7 @@ import { EthService } from './eth.service';
 export class EthGuard implements CanActivate {
     constructor(private ethService: EthService, private router: Router) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
+    canActivate(): boolean | Observable<boolean> | Promise<boolean> {
         const isDappBrowser = this.ethService.getIsDappBrowser();
         if (!isDappBrowser) {
             this.router.navigate(['/']);

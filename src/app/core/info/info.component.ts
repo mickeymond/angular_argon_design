@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { EthService } from '../../eth.service';
+import { EthService } from '../../shared/eth.service';
 
 @Component({
     selector: 'app-info',

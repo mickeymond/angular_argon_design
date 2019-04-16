@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { EthService } from '../eth.service';
-import { EventsService } from './events.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+
+import { EthService } from '../shared/eth.service';
 
 @Component({
     selector: 'app-events',
@@ -14,10 +14,10 @@ export class EventsComponent implements OnInit, OnDestroy {
 
     events = [];
 
-    constructor(private ethService: EthService, private eventsService: EventsService, private route: ActivatedRoute) {}
+    constructor(private ethService: EthService, private route: ActivatedRoute) {}
 
     ngOnInit() {
-        this.eventsSubscription = this.eventsService.getEventsListener().subscribe(events => {
+        this.eventsSubscription = this.ethService.getEventsListener().subscribe(events => {
             this.events = events;
             // console.log(events);
         });
@@ -25,9 +25,9 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.ethEventsSubscription = this.ethService.getEthEventsListener().subscribe((events) => {
             this.route.queryParamMap.subscribe((queryMap: ParamMap) => {
                 if (queryMap.has('creator')) {
-                    this.eventsService.fetchEventsData(events, queryMap.get('creator'), false);
+                    this.ethService.fetchEventsData(events, queryMap.get('creator'), false);
                 } else {
-                    this.eventsService.fetchEventsData(events, false, false);
+                    this.ethService.fetchEventsData(events, false, false);
                 }
             });
         });

@@ -2,12 +2,17 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
+import { IEvent } from './event.model';
+
 declare let window: any;
 declare let web3: any;
 declare let require: any;
 
 const Web3 = require('web3');
 const TruffleContract = require('truffle-contract');
+const _ = require('lodash');
+
+const colors = ['primary', 'warning', 'success', 'info'];
 
 @Injectable({
     providedIn: 'root'
@@ -16,12 +21,14 @@ export class EthService {
     private ethStatusListener = new Subject<boolean>();
     private ethMessageListener = new Subject<string>();
     private ethEventsListener = new Subject<string[]>();
+    private eventsListener = new Subject<any[]>();
     private ethAccountListener = new Subject<string>();
 
     private eventCreatorContract: any;
     private isDappBrowser = false;
     private ethMessage: string;
     private currentAccount: string;
+    private events: IEvent[];
 
     getIsDappBrowser() {
         return this.isDappBrowser;
@@ -45,6 +52,10 @@ export class EthService {
 
     getEthEventsListener() {
         return this.ethEventsListener.asObservable();
+    }
+
+    getEventsListener() {
+        return this.eventsListener.asObservable();
     }
 
     async createEvent(title: string, description: string, startDate: number, endDate: number) {
@@ -75,10 +86,53 @@ export class EthService {
         this.ethEventsListener.next(events);
     }
 
+    async fetchEventsData(events: string[], eventCreator: any, search: any) {
+        const EventContract = TruffleContract(require('../../contracts/Event.json'));
+        EventContract.setProvider(web3.currentProvider);
+
+        const allEvents: IEvent[] = [];
+        for (const address of events.reverse()) {
+
+            const eventContract = await EventContract.at(address);
+
+            const creator = await eventContract.creator();
+            const title = await eventContract.title();
+            const description = await eventContract.description();
+            const startDate = await eventContract.startDate();
+            const endDate = await eventContract.endDate();
+
+            allEvents.push({
+                address,
+                creator,
+                title,
+                description,
+                start: startDate.toNumber() * 1000,
+                end: endDate.toNumber() * 1000,
+                color: _.sample(colors)
+            });
+        }
+        // console.log(allEvents);
+
+        if (eventCreator) {
+            this.events = _.filter(allEvents, (event: IEvent) => event.creator === eventCreator);
+            this.eventsListener.next(this.events);
+        } else if (search) {
+            this.events = _.filter(allEvents, (event: IEvent) => {
+                return (event.title.includes(search) || event.description.includes(search));
+            });
+            this.eventsListener.next(this.events);
+        } else {
+            const now = Date.now();
+
+            this.events = _.filter(allEvents, (event: IEvent) => (now >= event.start && now <= event.end));
+            this.eventsListener.next(this.events);
+        }
+    }
+
     async initializeContract() {
         // console.log(web3);
         try {
-            const EventCreatorContract = TruffleContract(require('../contracts/EventCreator.json'));
+            const EventCreatorContract = TruffleContract(require('../../contracts/EventCreator.json'));
             EventCreatorContract.setProvider(web3.currentProvider);
 
             this.eventCreatorContract = await EventCreatorContract.deployed();

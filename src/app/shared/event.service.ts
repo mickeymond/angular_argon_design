@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { IEvent } from '../event.model';
-import { EthService } from '../../eth.service';
+import { IEvent } from './event.model';
+import { EthService } from './eth.service';
 
 declare let web3: any;
 declare let require: any;
@@ -10,10 +10,10 @@ declare let require: any;
 const _ = require('lodash');
 const TruffleContract = require('truffle-contract');
 
-const EventContract = TruffleContract(require('../../../contracts/Event.json'));
+const EventContract = TruffleContract(require('../../contracts/Event.json'));
 EventContract.setProvider(web3.currentProvider);
 
-const EventCategoryContract = TruffleContract(require('../../../contracts/EventCategory.json'));
+const EventCategoryContract = TruffleContract(require('../../contracts/EventCategory.json'));
 EventCategoryContract.setProvider(web3.currentProvider);
 
 const colors = ['primary', 'warning', 'success', 'info'];

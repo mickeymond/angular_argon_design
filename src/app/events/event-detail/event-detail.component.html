@@ -33,7 +33,8 @@
             <div class="card-body py-5">
               <h6 class="text-primary text-uppercase">{{event?.title}}</h6>
               <p class="description mt-3">{{event?.description}}</p>
-              <p><strong>All Categories</strong></p>
+              <a routerLink="/event/{{event?.address}}/edit" class="pull-right btn btn-primary">Edit Event</a>
+              <p style="margin-top: 5rem"><strong>All Categories</strong></p>
               <div class="card shadow shadow-lg--hover mt-2" *ngFor="let category of categories">
                 <a routerLink="/event/{{event?.address}}/category/{{category.cAddress}}">
                   <div class="card-body">

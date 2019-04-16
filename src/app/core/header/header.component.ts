@@ -4,8 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 
-import { EthService } from '../../eth.service';
-import { EventsService } from 'src/app/events/events.service';
+import { EthService } from '../../shared/eth.service';
 
 @Component({
     selector: 'app-header',
@@ -21,13 +20,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     creator: string;
     private events = [];
 
-    constructor(private ethService: EthService, private router: Router, private eventsService: EventsService) {}
+    constructor(private ethService: EthService, private router: Router) {}
 
     searchEvents(form: NgForm) {
         if (form.invalid) {
             return;
         }
-        this.eventsService.fetchEventsData(this.events, false, form.value.search);
+        this.ethService.fetchEventsData(this.events, false, form.value.search);
         form.resetForm();
     }
 
