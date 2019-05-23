@@ -32,6 +32,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.eventSubscription = this.eventService.getEventListener().subscribe(event => {
             this.event = event;
+            // console.log(this.event);
         });
 
         this.categoriesSubscription = this.eventService.getCategoriesListener().subscribe(categories => {

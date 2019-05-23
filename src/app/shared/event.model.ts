@@ -6,4 +6,5 @@ export interface IEvent {
     start: number;
     end: number;
     color: string;
+    isLive: boolean;
 }

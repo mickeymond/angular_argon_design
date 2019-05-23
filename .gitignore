@@ -47,3 +47,8 @@ testem.log
 .DS_Store
 Thumbs.db
 /src/contracts
+
+build
+truffle-config.js
+.vs
+.vscode

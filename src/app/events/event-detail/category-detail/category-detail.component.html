@@ -8,35 +8,19 @@
         <table class="table table-center">
           <tr>
             <th>Nominee Name</th>
-            <th>No. of Votes</th>
-            <th>Actions</th>
+            <th class="text-center">No. of Votes</th>
+            <th class="text-center">Actions</th>
           </tr>
           <tr *ngFor="let candidate of candidates">
             <td>{{candidate.name}}</td>
-            <td>{{candidate.numberOfVotes}}</td>
-            <td>...</td>
+            <td class="text-center">{{candidate.numberOfVotes}}</td>
+            <td class="text-center">
+              <button class="btn btn-success btn-sm" (click)="castVote(candidate.id)">
+                <i class="fa fa-thumbs-up"></i>
+              </button>
+            </td>
           </tr>
         </table>
-      </div>
-    </div>
-    <div class="card shadow shadow-lg--hover mt-2">
-      <div class="card-body">
-        <form #voteForm="ngForm" (submit)="castVote(voteForm)" autocomplete="off">
-          <fieldset>
-            <p><strong>Vote For Your Nominee</strong></p>
-            <div class="form-group">
-              <select id="voting-box" class="form-control" ngModel name="candidate" required>
-                <option class="form-control" selected disabled value="0">Please Select a Nominee</option>
-                <option class="form-control" *ngFor="let candidate of candidates" [value]="candidate.id">
-                  {{candidate.name}}
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <button type="submit" class="btn btn-success">Vote</button>
-            </div>
-          </fieldset>
-        </form>
       </div>
     </div>
     <form #addCandidateForm="ngForm" (submit)="addCandidate(addCandidateForm)" autocomplete="off" class="mt-5">

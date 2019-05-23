@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 
 import { IEvent } from './event.model';
 import { EthService } from './eth.service';
+import { ICategory } from './category.model';
 
 declare let web3: any;
 declare let require: any;
@@ -10,10 +11,10 @@ declare let require: any;
 const _ = require('lodash');
 const TruffleContract = require('truffle-contract');
 
-const EventContract = TruffleContract(require('../../contracts/Event.json'));
+const EventContract = TruffleContract(require('../../../build/contracts/Event.json'));
 EventContract.setProvider(web3.currentProvider);
 
-const EventCategoryContract = TruffleContract(require('../../contracts/EventCategory.json'));
+const EventCategoryContract = TruffleContract(require('../../../build/contracts/EventCategory.json'));
 EventCategoryContract.setProvider(web3.currentProvider);
 
 const colors = ['primary', 'warning', 'success', 'info'];
@@ -38,6 +39,7 @@ export class EventService {
     }
 
     async getEvent(address: string) {
+        const now = Date.now();
 
         this.eventContractInstance = await EventContract.at(address);
         // console.log(this.eventContractInstance);
@@ -54,7 +56,8 @@ export class EventService {
             description,
             start: startDate.toNumber(),
             end: endDate.toNumber(),
-            color: _.sample(colors)
+            color: _.sample(colors),
+            isLive: (now >= (startDate.toNumber()) * 1000) && (now <= (endDate.toNumber() * 1000))
         };
 
         // console.log(this.event);
@@ -77,17 +80,26 @@ export class EventService {
     }
 
     async getCategories() {
-        const allCategories = [];
+        const allCategories: ICategory[] = [];
+
+        const now = Date.now();
 
         const categories = await this.eventContractInstance.getCategories();
-        for (const cAddress of categories) {
-            // console.log(cAddress);
-            const categoryContract = await EventCategoryContract.at(cAddress);
+        for (const address of categories) {
+            // console.log(address);
+            const categoryContract = await EventCategoryContract.at(address);
 
-            const cTitle = await categoryContract.title();
-            const cDescription = await categoryContract.description();
+            const title = await categoryContract.title();
+            const description = await categoryContract.description();
+            const startDate = await categoryContract.startDate();
+            const endDate = await categoryContract.endDate();
 
-            allCategories.push({ cAddress, cTitle, cDescription });
+            allCategories.push({
+                address,
+                title,
+                description,
+                isLive: (now >= (startDate.toNumber()) * 1000) && (now <= (endDate.toNumber() * 1000))
+            });
         }
 
         this.categoriesListener.next(allCategories);

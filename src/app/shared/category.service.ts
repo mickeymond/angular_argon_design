@@ -11,7 +11,7 @@ declare let require: any;
 const _ = require('lodash');
 const TruffleContract = require('truffle-contract');
 
-const EventCategoryContract = TruffleContract(require('../../contracts/EventCategory.json'));
+const EventCategoryContract = TruffleContract(require('../../../build/contracts/EventCategory.json'));
 EventCategoryContract.setProvider(web3.currentProvider);
 
 @Injectable({
@@ -34,15 +34,21 @@ export class CategoryService {
     }
 
     async getCategory(address: string) {
+        const now = Date.now();
+
         try {
             this.eventCategoryInstance = await EventCategoryContract.at(address);
             // console.log(this.eventCategoryInstance);
             const title = await this.eventCategoryInstance.title();
             const description = await this.eventCategoryInstance.description();
+            const startDate = await this.eventCategoryInstance.startDate();
+            const endDate = await this.eventCategoryInstance.endDate();
 
             const category: ICategory = {
+                address,
                 title,
-                description
+                description,
+                isLive: (now >= (startDate.toNumber()) * 1000) && (now <= (endDate.toNumber() * 1000))
             };
 
             this.categoryListener.next(category);
@@ -88,7 +94,8 @@ export class CategoryService {
     async castVote(id: number) {
         try {
             const receipt = await this.eventCategoryInstance.castVote(id, {
-                from: this.ethService.getCurrentAccount()
+                from: this.ethService.getCurrentAccount(),
+                value: 1000000
             });
             // console.log(receipt);
             this.getCandidates();

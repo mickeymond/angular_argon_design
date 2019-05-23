@@ -87,8 +87,10 @@ export class EthService {
     }
 
     async fetchEventsData(events: string[], eventCreator: any, search: any) {
-        const EventContract = TruffleContract(require('../../contracts/Event.json'));
+        const EventContract = TruffleContract(require('../../../build/contracts/Event.json'));
         EventContract.setProvider(web3.currentProvider);
+
+        const now = Date.now();
 
         const allEvents: IEvent[] = [];
         for (const address of events.reverse()) {
@@ -108,7 +110,8 @@ export class EthService {
                 description,
                 start: startDate.toNumber() * 1000,
                 end: endDate.toNumber() * 1000,
-                color: _.sample(colors)
+                color: _.sample(colors),
+                isLive: (now >= (startDate.toNumber()) * 1000) && (now <= (endDate.toNumber() * 1000))
             });
         }
         // console.log(allEvents);
@@ -122,8 +125,6 @@ export class EthService {
             });
             this.eventsListener.next(this.events);
         } else {
-            const now = Date.now();
-
             this.events = _.filter(allEvents, (event: IEvent) => (now >= event.start && now <= event.end));
             this.eventsListener.next(this.events);
         }
@@ -132,7 +133,7 @@ export class EthService {
     async initializeContract() {
         // console.log(web3);
         try {
-            const EventCreatorContract = TruffleContract(require('../../contracts/EventCreator.json'));
+            const EventCreatorContract = TruffleContract(require('../../../build/contracts/EventCreator.json'));
             EventCreatorContract.setProvider(web3.currentProvider);
 
             this.eventCreatorContract = await EventCreatorContract.deployed();
@@ -143,7 +144,7 @@ export class EthService {
             // console.log(this.currentAccount);
 
             const user = await this.eventCreatorContract.users(this.currentAccount);
-            // console.log(user);
+            console.log(user);
 
             if (user[0] === '') {
                 this.router.navigate(['/info']);

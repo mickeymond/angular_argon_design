@@ -17,6 +17,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
 
     category: ICategory;
     candidates = [];
+    isLive;
     private categoryAddress: string;
 
     constructor(private route: ActivatedRoute, private categoryService: CategoryService) {}
@@ -29,27 +30,24 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
         form.resetForm();
     }
 
-    castVote(form: NgForm) {
-        if (form.invalid) {
-            return;
-        }
-        // console.log(form.value);
-        this.categoryService.castVote(form.value.candidate);
-        form.resetForm();
+    castVote(id: number) {
+        this.categoryService.castVote(id);
     }
 
     ngOnInit() {
         this.categorySubscription =  this.categoryService.getCategoryListener().subscribe(category => {
             this.category = category;
+            // console.log(this.category);
         });
 
         this.candidatesSubscription = this.categoryService.getCandidatesListener().subscribe(candidates => {
             this.candidates = candidates;
+            // console.log(this.candidates);
         });
 
         this.route.paramMap.subscribe((paramMap: ParamMap) => {
             this.categoryAddress = paramMap.get('cAddress');
-            // console.log(this.categoryAddress);
+            // console.log(paramMap);
             this.categoryService.getCategory(this.categoryAddress);
         });
     }
