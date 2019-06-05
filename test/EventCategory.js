@@ -8,8 +8,8 @@ contract('EventCategory', async accounts => {
 		const title = 'Event of the year is here';
 		const description = 'Everyone will love this one';
 		const photo = 'https://ipfs.infura.io/ipfs/ImageHash';
-		const startDate = Math.round(new Date('June 04, 2019').getTime() / 1000);
-		const endDate = Math.round(new Date('July 04, 2019').getTime() / 1000);
+		const startDate = Math.round(new Date('July 04, 2019').getTime() / 1000);
+		const endDate = Math.round(new Date('August 04, 2019').getTime() / 1000);
 
 		const eventCreatorInstance = await EventCreator.deployed();
 		await eventCreatorInstance.createEvent(title, description, photo, startDate, endDate, {
@@ -26,6 +26,24 @@ contract('EventCategory', async accounts => {
 		const creator = await categoryInstance.creator();
 		// console.log(creator);
 		assert.equal(creator, accounts[1]);
+	});
+
+	it('Should update Event Category', async () => {
+		const eventCreatorInstance = await EventCreator.deployed();
+		const events = await eventCreatorInstance.getEvents();
+		const eventInstance = await Event.at(events[0]);
+		const categories = await eventInstance.getCategories();
+		// console.log(categories);
+		const categoryInstance = await EventCategory.at(categories[0]);
+		const receipt = await categoryInstance.update('Category title changed', 'Description also changed', {
+			from: accounts[1]
+		});
+		// console.log(receipt);
+		const title = await categoryInstance.title();
+		// console.log(title);
+
+		assert.equal(title, 'Category title changed')
+		assert.equal(receipt.logs[0].event, 'CategoryUpdated');
 	});
 
 	it('Should add candidate to Event Category', async () => {

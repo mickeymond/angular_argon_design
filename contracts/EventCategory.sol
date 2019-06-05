@@ -4,7 +4,7 @@ import './Event.sol';
 
 contract EventCategory {
     uint public index;
-    address payable public creator;
+    address public creator;
     string public title;
     string public description;
 
@@ -24,6 +24,7 @@ contract EventCategory {
     uint public candidatesCount;
     uint public votersCount;
 
+    event CategoryUpdated(string title, string description);
     event CandidateAdded(uint id, string name);
     event CandidateDeleted(uint id);
     event VoteCasted(address voter, uint timestamp);
@@ -38,7 +39,7 @@ contract EventCategory {
         _;
     }
 
-    constructor(uint _index, address payable _creator, string memory _title, string memory _description) public {
+    constructor(uint _index, address _creator, string memory _title, string memory _description) public {
         index = _index;
         creator = _creator;
         title = _title;
@@ -46,14 +47,15 @@ contract EventCategory {
         parent = Event(msg.sender);
     }
 
-    function update(address _updator, string calldata _title, string calldata _description) external isBeforeStart {
-        require(_updator == creator, 'only creator can update category');
+    function update(string memory _title, string memory _description) public isBeforeStart {
+        require(msg.sender == creator, 'only creator can update category');
         title = _title;
         description = _description;
+        emit CategoryUpdated(_title, _description);
     }
 
     function destroy() external isBeforeStart {
-        selfdestruct(creator);
+        selfdestruct(address(uint160(creator)));
     }
 
     function addCandidate(string memory _name, string memory _photo, string memory _description) public isBeforeStart {

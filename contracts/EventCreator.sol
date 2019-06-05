@@ -3,7 +3,7 @@ pragma solidity >=0.4.21 <0.6.0;
 import './Event.sol';
 
 contract EventCreator {
-    address payable public productOwner;
+    address public productOwner;
 
     mapping(address => User) public users;
 

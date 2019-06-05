@@ -3,7 +3,7 @@ pragma solidity >=0.4.21 <0.6.0;
 import './EventCategory.sol';
 
 contract Event {
-    address payable public creator;
+    address public creator;
     uint public index;
     string public title;
     string public description;
@@ -16,14 +16,13 @@ contract Event {
     event EventUpdated(string title, string description, uint startDate, uint endDate);
     event EventCategoryAdded(string title, string description);
     event EventCategoryDeleted(uint id);
-    event CategoryUpdated(string title, string description);
 
     modifier isBeforeStart() {
         require(now < startDate, 'You can not perform this operation since event has began');
         _;
     }
     
-    constructor(uint _index, address payable _creator, string memory _title, string memory _description, string memory _photo, uint _startDate, uint _endDate
+    constructor(uint _index, address _creator, string memory _title, string memory _description, string memory _photo, uint _startDate, uint _endDate
     ) public {
         index = _index;
         creator = _creator;
@@ -44,16 +43,16 @@ contract Event {
         emit EventUpdated(_title, _description, _startDate, _endDate);
     }
 
-    function updateCategory(uint _index, string memory _title, string memory _description) public {
-        require(msg.sender == creator, 'only creator can update category');
-        EventCategory category = categories[_index];
-        category.update(msg.sender, _title, _description);
-        emit CategoryUpdated(_title, _description);
-    }
+    // function updateCategory(uint _index, string memory _title, string memory _description) public {
+    //     require(msg.sender == creator, 'only creator can update category');
+    //     EventCategory category = categories[_index];
+    //     category.update(msg.sender, _title, _description);
+    //     emit CategoryUpdated(_title, _description);
+    // }
 
     function destroy(address _destroyer) external isBeforeStart {
         require(_destroyer == creator, 'only creator can destroy event');
-        selfdestruct(creator);
+        selfdestruct(address(uint160(creator)));
     }
 
     function addCategory(string memory _title, string memory _description) public isBeforeStart {

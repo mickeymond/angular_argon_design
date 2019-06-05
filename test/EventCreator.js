@@ -34,8 +34,8 @@ contract('EventCreator', async accounts => {
 		const title = 'Event of the year is here';
 		const description = 'Everyone will love this one';
 		const photo = 'https://ipfs.infura.io/ipfs/ImageHash';
-		const startDate = Math.round(new Date('June 04, 2019').getTime() / 1000);
-		const endDate = Math.round(new Date('July 04, 2019').getTime() / 1000);
+		const startDate = Math.round(new Date('July 04, 2019').getTime() / 1000);
+		const endDate = Math.round(new Date('August 04, 2019').getTime() / 1000);
 
 		await instance.createEvent(title, description, photo, startDate, endDate, {
 			from: accounts[1], value: 1000000
@@ -86,5 +86,12 @@ contract('EventCreator', async accounts => {
 		const user = await instance.users(accounts[1]);
 		// console.log(user);
 		assert.equal(user.isEventCreator, true);
+	});
+
+	it('Should get creator requests', async () => {
+		const instance = await EventCreator.deployed();
+		const receipt = await instance.getCreatorRequests();
+		// console.log(receipt);
+		assert.equal(receipt.length, 1);
 	});
 });
